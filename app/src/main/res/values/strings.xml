@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">料理材料計算機</string>
+    <string name="ingredient_name">材料名</string>
+    <string name="ratio">比率</string>
+    <string name="add_ingredient">材料を追加</string>
+    <string name="first_ingredient_weight">1つ目の材料の重量 (g)</string>
+    <string name="calculate">計算</string>
+    <string name="clear">クリア</string>
+    <string name="save">保存</string>
+    <string name="load">読込</string>
+    <string name="result">結果</string>
+    <string name="enter_first_weight">1つ目の材料の重量を入力してください</string>
+    <string name="enter_ingredients">材料と比率を入力してください</string>
+    <string name="weight">重量 (g)</string>
+    <string name="recipe_name">レシピ名</string>
+    <string name="enter_recipe_name">レシピ名を入力してください</string>
+    <string name="saved">保存しました</string>
+    <string name="loaded">読み込みました</string>
+    <string name="no_saved_recipes">保存されたレシピがありません</string>
+    <string name="select_recipe">レシピを選択</string>
+</resources>
