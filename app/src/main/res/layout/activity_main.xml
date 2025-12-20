@@ -107,7 +107,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:padding="12dp"
-                android:background="#F5F5F5"
+                android:background="#000000"
+                android:textColor="#CCCCCC"
                 android:minHeight="100dp"
                 android:text="" />
 
