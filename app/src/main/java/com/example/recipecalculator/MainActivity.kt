@@ -1,6 +1,8 @@
 package com.example.recipecalculator
 
 import android.app.AlertDialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -43,6 +45,21 @@ class MainActivity : AppCompatActivity() {
         btnSave = findViewById(R.id.btnSave)
         btnLoad = findViewById(R.id.btnLoad)
         tvResult = findViewById(R.id.tvResult)
+
+        // 結果表示部分を長押しでコピーできるようにする
+        tvResult.setTextIsSelectable(true)
+        tvResult.setOnLongClickListener {
+            val resultText = tvResult.text.toString()
+            if (resultText.isNotEmpty()) {
+                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("計算結果", resultText)
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(this, "結果をコピーしました", Toast.LENGTH_SHORT).show()
+                true
+            } else {
+                false
+            }
+        }
 
         // 最初の材料入力欄を保存
         firstIngredientView = ingredientsContainer.getChildAt(0) as LinearLayout
@@ -137,8 +154,7 @@ class MainActivity : AppCompatActivity() {
 
         for (ingredient in ingredients) {
             val weight = ingredient.ratio * unitWeight
-            val percentage = (ingredient.ratio / totalRatio) * 100
-            resultText.append("${ingredient.name}: ${String.format("%.1f", weight)}g (${String.format("%.1f", percentage)}%)\n")
+            resultText.append("${ingredient.name}: ${String.format("%.1f", weight)}g\n")
         }
 
         tvResult.text = resultText.toString()
