@@ -281,6 +281,13 @@ class MainActivity : AppCompatActivity() {
         Log.d("RecipeCalc", "Total ingredients: ${recipe.ingredients.size}")
         Log.d("RecipeCalc", "otherIngredientViews size: ${otherIngredientViews.size}")
 
+        // 必要な入力欄の数を確保（1つ目の材料は既にあるので、残りの材料の数だけ必要）
+        val requiredOtherViews = recipe.ingredients.size - 1
+        while (otherIngredientViews.size < requiredOtherViews) {
+            addIngredientRow()
+            Log.d("RecipeCalc", "Added ingredient row, total now: ${otherIngredientViews.size}")
+        }
+
         // 1つ目の材料
         if (recipe.ingredients.isNotEmpty()) {
             val first = recipe.ingredients[0]
