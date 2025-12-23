@@ -9,6 +9,7 @@
     <string name="clear">クリア</string>
     <string name="save">保存</string>
     <string name="load">読込</string>
+    <string name="delete">削除</string>
     <string name="result">結果</string>
     <string name="enter_first_weight">1つ目の材料の重量を入力してください</string>
     <string name="enter_ingredients">材料と比率を入力してください</string>
@@ -19,4 +20,6 @@
     <string name="loaded">読み込みました</string>
     <string name="no_saved_recipes">保存されたレシピがありません</string>
     <string name="select_recipe">レシピを選択</string>
+    <string name="select_recipe_to_delete">削除するレシピを選択</string>
+    <string name="deleted">削除しました</string>
 </resources>

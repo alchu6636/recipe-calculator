@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnClear: MaterialButton
     private lateinit var btnSave: MaterialButton
     private lateinit var btnLoad: MaterialButton
+    private lateinit var btnDelete: MaterialButton
     private lateinit var tvResult: android.widget.TextView
 
     private lateinit var firstIngredientView: LinearLayout
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         btnClear = findViewById(R.id.btnClear)
         btnSave = findViewById(R.id.btnSave)
         btnLoad = findViewById(R.id.btnLoad)
+        btnDelete = findViewById(R.id.btnDelete)
         tvResult = findViewById(R.id.tvResult)
 
         // 結果表示部分を長押しでコピーできるようにする
@@ -89,6 +91,10 @@ class MainActivity : AppCompatActivity() {
 
         btnLoad.setOnClickListener {
             loadRecipe()
+        }
+
+        btnDelete.setOnClickListener {
+            deleteRecipe()
         }
     }
 
@@ -224,7 +230,36 @@ class MainActivity : AppCompatActivity() {
             .setItems(recipeNames) { _, which ->
                 val recipe = recipes[which]
                 loadRecipeData(recipe)
+                calculateIngredients()
                 Toast.makeText(this, getString(R.string.loaded), Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("キャンセル", null)
+            .show()
+    }
+
+    private fun deleteRecipe() {
+        val recipes = getSavedRecipes()
+        if (recipes.isEmpty()) {
+            Toast.makeText(this, getString(R.string.no_saved_recipes), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val recipeNames = recipes.map { it.name }.toTypedArray()
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.select_recipe_to_delete))
+            .setItems(recipeNames) { _, which ->
+                val recipeToDelete = recipes[which]
+                // 削除確認ダイアログ
+                AlertDialog.Builder(this)
+                    .setTitle("確認")
+                    .setMessage("「${recipeToDelete.name}」を削除しますか？")
+                    .setPositiveButton("削除") { _, _ ->
+                        deleteRecipeFromPrefs(recipeToDelete.name)
+                        Toast.makeText(this, getString(R.string.deleted), Toast.LENGTH_SHORT).show()
+                    }
+                    .setNegativeButton("キャンセル", null)
+                    .show()
             }
             .setNegativeButton("キャンセル", null)
             .show()
@@ -335,6 +370,19 @@ class MainActivity : AppCompatActivity() {
         // 保存確認
         val saved = prefs.getString(RECIPES_KEY, "")
         Log.d("RecipeCalc", "Saved verification: $saved")
+    }
+
+    private fun deleteRecipeFromPrefs(recipeName: String) {
+        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val existingRecipes = getSavedRecipes().toMutableList()
+
+        // 指定されたレシピを削除
+        existingRecipes.removeAll { it.name == recipeName }
+
+        val recipesJson = existingRecipes.joinToString("###RECIPE###") { it.toJson() }
+        Log.d("RecipeCalc", "Deleting recipe: $recipeName")
+        Log.d("RecipeCalc", "Remaining recipes: $recipesJson")
+        prefs.edit().putString(RECIPES_KEY, recipesJson).apply()
     }
 
     private fun getSavedRecipes(): List<Recipe> {
